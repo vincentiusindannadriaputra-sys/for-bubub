@@ -247,7 +247,7 @@
     </div>
 
     <script>
-        // ✅ PERBAIKAN 3: Skrip DIBUNGKUS agar kado pasti keluar (Mengatasi error "null")
+        // ✅ PERBAIKAN KRUSIAL: Skrip DIBUNGKUS di DOMContentLoaded agar semua elemen HTML terdeteksi sebelum skrip dijalankan.
         document.addEventListener('DOMContentLoaded', (event) => {
             const giftBox = document.getElementById('giftBox');
             const messageModal = document.getElementById('messageModal');
@@ -317,7 +317,6 @@
                 if (!musicPlayed) {
                     surpriseMusic.currentTime = 0; 
                     surpriseMusic.volume = 0.5;
-                    // Membutuhkan user interaction untuk play, jadi kita gunakan teknik mute/unmute
                     surpriseMusic.muted = true; 
                     
                     surpriseMusic.play()
@@ -352,7 +351,7 @@
                 }, 500); 
             }
 
-            // ✅ Perbaikan 4: Daftarkan closeModal agar bisa dipanggil dari HTML onclick
+            // Daftarkan closeModal agar bisa dipanggil dari HTML onclick
             window.closeModal = closeModal; 
 
             messageModal.addEventListener('click', (event) => {
