@@ -60,9 +60,30 @@
             60% { transform: translateY(-7px); }
         }
 
-        .gift-box::before, .gift-box::after { content: ''; position: absolute; background-color: #ffc107; }
-        .gift-box::before { width: 30px; height: 100%; left: 50%; transform: translateX(-50%); }
-        .gift-box::after { width: 100%; height: 30px; top: 50%; transform: translateY(-50%); }
+        /* 🎁 PERBAIKAN PENTING UNTUK PITA AGAR TIDAK MELEBIHI KOTAK */
+        .gift-box::before, .gift-box::after { 
+            content: ''; 
+            position: absolute; 
+            background-color: #ffc107; /* Warna pita */
+            top: 0; 
+            left: 0;
+        }
+        /* Pita Vertikal */
+        .gift-box::before { 
+            width: 30px; /* Lebar pita vertikal */
+            height: 100%; 
+            left: 50%; 
+            transform: translateX(-50%); /* Posisikan di tengah horizontal */
+        }
+        /* Pita Horizontal */
+        .gift-box::after { 
+            width: 100%; 
+            height: 30px; /* Tebal pita horizontal */
+            top: 50%; 
+            transform: translateY(-50%); /* Posisikan di tengah vertikal */
+        }
+        /* ---------------------------------------------------- */
+
 
         .gift-lid {
             position: absolute;
