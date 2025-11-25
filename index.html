@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sebuah Kejutan untukmu, Sayang!</title>
     <style>
-        /* Gaya CSS (Tidak ada perubahan) */
+        /* Gaya CSS (Tidak ada perubahan pada body, container, dan h1) */
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
@@ -61,27 +61,30 @@
         }
 
         /* 🎁 PERBAIKAN PENTING FINAL UNTUK BENTUK PITA PLUS (+) */
+        /* Pastikan pita tidak melebihi batas kotak */
         .gift-box::before, .gift-box::after { 
             content: ''; 
             position: absolute; 
             background-color: #ffc107; /* Warna pita */
             z-index: 5;
+            top: 0;
+            left: 0;
+            /* Tambahan: Tambahkan box-shadow tipis agar terlihat timbul */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
         /* Pita Vertikal */
         .gift-box::before { 
             width: 30px; 
             height: 100%; 
             left: 50%; 
-            transform: translateX(-50%); 
-            top: 0;
+            transform: translateX(-50%); /* Memusatkan secara horizontal */
         }
         /* Pita Horizontal */
         .gift-box::after { 
             width: 100%; 
             height: 30px; 
             top: 50%; 
-            transform: translateY(-50%); 
-            left: 0;
+            transform: translateY(-50%); /* Memusatkan secara vertikal */
         }
         /* ---------------------------------------------------- */
 
@@ -269,7 +272,6 @@
     </div>
 
     <script>
-        // ✅ PERBAIKAN KRUSIAL: Skrip DIBUNGKUS di DOMContentLoaded agar semua elemen HTML terdeteksi sebelum skrip dijalankan.
         document.addEventListener('DOMContentLoaded', (event) => {
             const giftBox = document.getElementById('giftBox');
             const messageModal = document.getElementById('messageModal');
@@ -291,6 +293,7 @@
             let musicPlayed = false;
 
             function stopMusic() {
+                // Hentikan dan atur ulang musik
                 surpriseMusic.pause();
                 surpriseMusic.currentTime = 0; 
                 musicPlayed = false;
@@ -300,6 +303,7 @@
                 if (isTyping) return;
 
                 if (lineIndex >= messageLines.length) {
+                    // Tampilkan foto setelah semua pesan selesai diketik
                     setTimeout(() => {
                         photoContainer.classList.add('visible');
                     }, 500); 
@@ -309,10 +313,12 @@
                 isTyping = true;
                 const lineText = messageLines[lineIndex];
                 
+                // Buat elemen p baru untuk baris pesan
                 const newLine = document.createElement('p');
                 newLine.innerHTML = `<span class="message-line"></span>`;
                 animatedTextDiv.appendChild(newLine);
                 
+                // Scroll otomatis ke bawah
                 animatedTextDiv.scrollTop = animatedTextDiv.scrollHeight;
 
                 const span = newLine.querySelector('.message-line');
@@ -326,16 +332,19 @@
                         clearInterval(typing);
                         isTyping = false;
                         lineIndex++;
+                        // Jeda sebelum mengetik baris berikutnya
                         setTimeout(typeMessage, 1200); 
                     }
-                }, 100); 
+                }, 100); // Kecepatan mengetik per karakter
             }
 
             giftBox.addEventListener('click', () => {
                 if (messageModal.classList.contains('active')) return; 
                 
+                // Animasi buka kado
                 giftBox.classList.add('opened');
                 
+                // Logika memutar musik
                 if (!musicPlayed) {
                     surpriseMusic.currentTime = 0; 
                     surpriseMusic.volume = 0.5;
@@ -343,19 +352,23 @@
                     
                     surpriseMusic.play()
                         .then(() => {
+                            // Coba un-mute setelah sebentar untuk mengatasi kebijakan autoplay browser
                             setTimeout(() => {
-                                surpriseMusic.muted = false; // Musik akan mulai terdengar
+                                surpriseMusic.muted = false; 
                                 musicPlayed = true;
                             }, 50); 
                         })
                         .catch(error => {
+                            // Jika play() gagal (misalnya karena kebijakan autoplay), tetap lanjutkan
                             musicPlayed = true; 
+                            console.error("Autoplay failed:", error);
                         });
                 }
                 
+                // Tampilkan modal dan mulai mengetik pesan
                 setTimeout(() => {
                     messageModal.classList.add('active');
-                    photoContainer.classList.remove('visible'); 
+                    photoContainer.classList.remove('visible'); // Sembunyikan foto dulu
                     typeMessage();
                 }, 500); 
             });
@@ -364,6 +377,7 @@
                 messageModal.classList.remove('active');
                 stopMusic(); 
                 
+                // Atur ulang tampilan setelah modal tertutup
                 setTimeout(() => {
                     giftBox.classList.remove('opened');
                     animatedTextDiv.innerHTML = ''; 
@@ -376,12 +390,13 @@
             // Daftarkan closeModal agar bisa dipanggil dari HTML onclick
             window.closeModal = closeModal; 
 
+            // Menutup modal jika mengklik area di luar modal
             messageModal.addEventListener('click', (event) => {
                 if (event.target === messageModal) {
                     closeModal();
                 }
             });
-        }); // <-- TUTUP WRAPPER document.addEventListener
+        }); 
     </script>
 </body>
 </html>
